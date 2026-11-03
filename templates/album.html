@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}{{ album.title }}{% endblock %}
+{% block content %}
+<a href="{{ url_for('index') }}#explore" class="back-link">← Back to explore</a>
+<section class="detail-hero"><div class="album-cover-wrap">{% if album.cover_url %}<img class="album-cover album-cover-large" src="{{ album.cover_url }}" alt="{{ album.title }} album cover">{% else %}<div class="album-art big-art {{ album.art_class }}"><span class="cover-title">{{ album.title }}</span><span class="cover-artist">{{ album.artist }}</span></div>{% endif %}</div><div class="detail-copy"><div class="kicker">{{ album.release_type|upper }} / {{ album.year }}</div><h1>{{ album.title }}</h1><h2>{% for musician in musicians %}<a href="{{ url_for('musician_detail', slug=musician.slug) }}">{{ musician.name }}</a>{% if not loop.last %}, {% endif %}{% else %}{{ album.artist }}{% endfor %}</h2><div class="genre-tags">{% for genre in genres %}<span class="genre"><a href="{{ url_for('genre_detail', slug=genre_slugs[genre]) }}">{{ genre }}</a></span>{% endfor %}</div><p>{{ reviews|length }} review{{ '' if reviews|length == 1 else 's' }} on Trackd</p>{% if average %}<div class="average">★ {{ average }} <small>/ 5 average</small></div>{% else %}<div class="average muted">Not yet rated</div>{% endif %}</div></section>
+{% if tracks %}
+<section class="album-tracks">
+  <div class="section-head"><div><div class="kicker">TRACKLIST</div><h2>Songs<span class="green-dot">.</span></h2></div></div>
+  <div class="song-list">
+    {% for track in tracks %}
+    <a class="song-row" href="{{ url_for('song_detail', song_id=track.id) }}">
+      <span class="track-number">{{ track.track_number }}</span><span class="song-title">{{ track.title }}</span>
+      {% if track.length_ms %}<span class="track-duration">{{ (track.length_ms // 60000) }}:{{ '%02d'|format((track.length_ms // 1000) % 60) }}</span>{% endif %}
+    </a>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+<section class="moment-log-panel">
+  <div><div class="kicker">VIBE & CONTEXT</div><h2>Log this listen<span class="green-dot">.</span></h2><p>Separate intentional attention from background noise, then save the moment.</p></div>
+  {% if current_user %}
+  <form method="post" action="{{ url_for('create_moment', album_id=album.id) }}" class="moment-form">
+    <fieldset><legend>How were you listening?</legend><div class="listen-types"><label><input type="radio" name="listen_type" value="active" checked><strong>Active</strong><span>Sitting down and paying attention</span></label><label><input type="radio" name="listen_type" value="passive"><strong>Passive</strong><span>Shuffle, work, commute, or background</span></label></div></fieldset>
+    <label for="moment_category">Moment category</label><select id="moment_category" name="category" required>{% for category in moment_categories %}<option value="{{ category }}">{{ category }}</option>{% endfor %}</select>
+    <label for="context">Where or when?</label><select id="context" name="context" required><option value="">Choose a scenario</option><option>Late-night highway drive</option><option>Cooking pasta alone</option><option>Crying in the kitchen</option><option>Working out</option></select>
+    <label for="custom_context">Or write your own</label><input id="custom_context" name="custom_context" maxlength="80" placeholder="Rainy walk through nowhere">
+    <label for="mvp_song_id">Most Valuable Track (optional)</label><select id="mvp_song_id" name="mvp_song_id"><option value="">No MVP selected</option>{% for track in tracks %}<option value="{{ track.id }}">{{ track.title }}</option>{% endfor %}</select>
+    <label for="moment_note">A quick note</label><textarea id="moment_note" name="note" maxlength="240" rows="3" placeholder="What stayed with you?"></textarea>
+    <button type="submit" class="primary-button">Save moment ↗</button>
+  </form>
+  {% else %}<div class="moment-login"><p><a href="{{ url_for('login') }}">Log in</a> to save active and passive listening moments.</p></div>{% endif %}
+</section>
+<div class="two-column"><section class="review-form-panel"><div class="kicker">YOUR TAKE</div><h2>Leave a review<span class="green-dot">.</span></h2><p>This is a local demo: reviews are saved to your computer's SQLite database.</p>
+<form method="post"><label for="name">Display name</label><input id="name" name="name" maxlength="40" required placeholder="Your name"><label for="rating">Your rating</label><select name="rating" id="rating" required><option value="">Select a rating</option>{% for half in range(1, 11) %}<option value="{{ half / 2 }}">★ {{ half / 2 }} / 5</option>{% endfor %}</select><label for="review_category">Listening moment</label><select name="category" id="review_category" required><option value="Chilling">Chilling</option>{% for category in moment_categories %}{% if category != 'Chilling' %}<option value="{{ category }}">{{ category }}</option>{% endif %}{% endfor %}</select><label for="review">Your review</label><textarea id="review" name="review" maxlength="1000" rows="5" required placeholder="What did you think of this album?"></textarea><button type="submit" class="primary-button">Post review ↗</button></form></section>
+<section class="review-list"><div class="kicker">WHAT PEOPLE THINK</div><h2>Reviews<span class="green-dot">.</span></h2>{% for review in reviews %}<article class="review-card"><div class="review-top"><strong>{{ review.display_name }}</strong><span class="stars">★ {{ review.rating }}/5</span></div>{% if review.category %}<span class="category-badge">{{ review.category }}</span>{% endif %}<p>{{ review.review_text }}</p><small>{{ review.created_at }}</small></article>{% else %}<div class="empty-state"><strong>No reviews yet.</strong><p>Be the first to give this album a rating.</p></div>{% endfor %}</section></div>
+{% endblock %}

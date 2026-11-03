@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}{{ song.title }}{% endblock %}
+{% block content %}
+<a href="{{ url_for('songs_index') }}" class="back-link">← All songs</a>
+<section class="song-detail">
+  {% if song.cover_url %}<img class="song-album-cover" src="{{ song.cover_url }}" alt="{{ song.album_title }} album cover">{% endif %}
+  <div class="kicker">TRACK {{ song.track_number }}</div>
+  <h1>{{ song.title }}<span class="green-dot">.</span></h1>
+  <p>From {{ song.release_type|lower }} <a href="{{ url_for('album_detail', album_id=song.album_id) }}">{{ song.album_title }}</a> · {{ song.year }}</p>
+  <p class="song-artists">{% for musician in musicians %}<a href="{{ url_for('musician_detail', slug=musician.slug) }}">{{ musician.name }}</a>{% if not loop.last %}, {% endif %}{% else %}{{ song.artist }}{% endfor %}</p>
+  <div class="genre-tags">{% for genre in genres %}<span class="genre"><a href="{{ url_for('genre_detail', slug=genre_slugs[genre]) }}">{{ genre }}</a></span>{% endfor %}</div>
+  {% if song.length_ms %}<p class="track-duration">{{ (song.length_ms // 60000) }}:{{ '%02d'|format((song.length_ms // 1000) % 60) }}</p>{% endif %}
+  {% if song.preview_url %}
+  <div class="preview-player"><div class="kicker">30-SECOND PREVIEW</div><audio controls preload="none" src="{{ song.preview_url }}" data-song-id="{{ song.id }}">Your browser does not support audio previews.</audio></div>
+  {% else %}<p class="preview-unavailable">A preview is not currently available for this track.</p>{% endif %}
+</section>
+{% endblock %}

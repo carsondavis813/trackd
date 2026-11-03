@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Musicians{% endblock %}
+{% block content %}
+<section class="section-head musician-page-head">
+  <div><div class="kicker">THE PEOPLE BEHIND THE MUSIC</div><h1>Musicians<span class="green-dot">.</span></h1><p>Explore artists and the genres they make.</p></div>
+</section>
+<nav class="sort-controls" aria-label="Musician sorting">
+  <span>Sort by</span>
+  <a class="{{ 'active' if sort == 'trending' else '' }}" href="{{ url_for('musicians_index', sort='trending') }}">Trending</a>
+  <a class="{{ 'active' if sort == 'popular' else '' }}" href="{{ url_for('musicians_index', sort='popular') }}">Most popular</a>
+  <a class="{{ 'active' if sort == 'newest' else '' }}" href="{{ url_for('musicians_index', sort='newest') }}">Newest</a>
+</nav>
+<section class="musician-grid">
+  {% for musician in musicians %}
+  <div class="musician-card">
+    <a class="musician-profile-link" href="{{ url_for('musician_detail', slug=musician.slug) }}">
+    {% if musician.image_url %}
+    <img class="musician-avatar" src="{{ musician.image_url }}" alt="Photo of {{ musician.name }}" loading="lazy">
+    {% else %}
+    <span class="musician-avatar musician-avatar-placeholder" aria-hidden="true">{{ musician.name[0] }}</span>
+    {% endif %}
+    <span class="musician-name">{{ musician.name }}</span>
+    </a>
+    {% if musician.image_source_url and musician.image_credit %}
+    <span class="photo-attribution"><a href="{{ musician.image_source_url }}" rel="noopener noreferrer">{{ musician.image_credit }}</a>{% if musician.image_license and musician.image_license_url %} · <a href="{{ musician.image_license_url }}" rel="noopener noreferrer">{{ musician.image_license }}</a>{% endif %}</span>
+    {% endif %}
+    <span class="genre-tags">{% for genre in genres_by_musician[musician.id] %}<span class="genre"><span>{{ genre }}</span></span>{% endfor %}</span>
+  </div>
+  {% endfor %}
+</section>
+{% endblock %}

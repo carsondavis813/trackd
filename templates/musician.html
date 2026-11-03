@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}{{ musician.name }}{% endblock %}
+{% block content %}
+<a href="{{ url_for('musicians_index') }}" class="back-link">← All musicians</a>
+<section class="musician-detail">
+  <div class="kicker">MUSICIAN</div>
+  {% if musician.image_url %}
+  <img class="musician-avatar musician-avatar-large" src="{{ musician.image_url }}" alt="Photo of {{ musician.name }}">
+  {% else %}
+  <span class="musician-avatar musician-avatar-large musician-avatar-placeholder" aria-hidden="true">{{ musician.name[0] }}</span>
+  {% endif %}
+  <h1>{{ musician.name }}<span class="green-dot">.</span></h1>
+  <h2>Genres</h2>
+  <div class="genre-tags">
+    {% for genre in genres %}
+    <span class="genre"><a href="{{ url_for('genre_detail', slug=genre_slugs[genre]) }}">{{ genre }}</a></span>
+    {% endfor %}
+  </div>
+  {% if musician.image_source_url and musician.image_credit %}
+  <p class="photo-attribution">Photo: <a href="{{ musician.image_source_url }}" rel="noopener noreferrer">{{ musician.image_credit }}</a>{% if musician.image_license and musician.image_license_url %} · <a href="{{ musician.image_license_url }}" rel="noopener noreferrer">{{ musician.image_license }}</a>{% endif %}</p>
+  {% endif %}
+</section>
+{% if songs %}
+<section class="musicians-section">
+  <div class="section-head"><div><div class="kicker">TRACKD CATALOG</div><h2>Songs<span class="green-dot">.</span></h2></div></div>
+  <div class="song-list">
+    {% for song in songs %}
+    <div class="song-row">
+      <a class="song-title" href="{{ url_for('song_detail', song_id=song.id) }}">{{ song.title }}</a><span class="song-album">{{ song.album_title }}</span>
+      <span class="genre-tags">{% for genre in album_genres[song.album_id] %}<span class="genre"><a href="{{ url_for('genre_detail', slug=genre_slugs[genre]) }}">{{ genre }}</a></span>{% endfor %}</span>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+<section class="musicians-section">
+  <div class="section-head"><div><div class="kicker">TRACKD CATALOG</div><h2>Releases<span class="green-dot">.</span></h2></div></div>
+  <div class="album-grid">
+    {% for album in albums %}
+    <div class="album-card">
+    <a href="{{ url_for('album_detail', album_id=album.id) }}">
+      {% if album.cover_url %}<img class="album-cover" src="{{ album.cover_url }}" alt="{{ album.title }} album cover" loading="lazy">{% else %}<div class="album-art {{ album.art_class }}"><span class="cover-title">{{ album.title }}</span><span class="cover-artist">{{ album.artist }}</span></div>{% endif %}
+      <div class="album-title">{{ album.title }}</div>
+      <div class="album-meta">{{ album.year }}</div>
+    </a>
+      <div class="genre-tags">{% for genre in album_genres[album.id] %}<span class="genre"><a href="{{ url_for('genre_detail', slug=genre_slugs[genre]) }}">{{ genre }}</a></span>{% endfor %}</div>
+    </div>
+    {% else %}
+    <p class="empty">No albums by this musician in the catalog yet.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

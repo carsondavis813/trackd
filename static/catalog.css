@@ -1,0 +1,32 @@
+.musician-avatar{display:grid;place-items:center;width:68px;height:68px;object-fit:cover;border-radius:50%;border:1px solid #405249;background:#15231b}
+.musician-avatar-placeholder{color:var(--green);font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:700}
+.musician-avatar-large{width:128px;height:128px;margin-top:22px;font-size:48px}
+.photo-attribution{margin:18px 0 0;color:var(--muted);font-size:11px}
+.photo-attribution a{color:#c6d6cc;text-decoration:underline;text-underline-offset:2px}
+.song-list{border-top:1px solid var(--line);margin-bottom:70px}
+.song-row{display:flex;align-items:center;gap:16px;min-height:62px;padding:12px 15px;border-bottom:1px solid var(--line);background:#101615}
+.song-row:hover{background:#17211c}
+.song-title{font-weight:700;flex:1;min-width:120px}
+.song-album{color:var(--muted);font-size:13px;flex:1}
+.song-album a:hover{color:var(--green)}
+.track-number,.track-duration{font-variant-numeric:tabular-nums;color:var(--muted);font-size:13px}
+.album-tracks{padding-bottom:25px}
+.album-tracks .song-list{margin-bottom:0}
+.song-detail{padding:60px 0 100px;max-width:760px}
+.song-detail h1{font-size:clamp(42px,6vw,72px);margin:14px 0}
+.song-detail p{color:var(--muted);line-height:1.7}
+.song-detail p a,.song-artists a{color:#c6f49b}
+.song-artists{font-size:18px}
+.pagination{display:flex;align-items:center;justify-content:center;gap:24px;padding:0 0 70px}
+.pagination a{color:var(--green)}
+.pagination span{color:var(--muted);font-size:13px}
+.art-imported{background:linear-gradient(145deg,#334b3d,#15231d 50%,#435b40);color:#e6f4db}
+.album-cover{display:block;width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;background:#101513}
+.album-cover-large{width:230px;height:230px;border-radius:14px}.album-cover-wrap{flex:none}
+.song-album-cover{width:150px;height:150px;border-radius:12px;object-fit:cover;float:left;margin-right:24px}
+.song-row-cover{width:44px;height:44px;border-radius:6px;object-fit:cover;flex:none}
+.song-detail{overflow:hidden}
+@media(max-width:600px){.song-album-cover{width:112px;height:112px;margin-right:16px}.album-cover-large{width:180px;height:180px}}
+.preview-player{clear:both;padding-top:28px;max-width:520px}.preview-player audio{width:100%;margin-top:10px;accent-color:#8dd35d}
+.preview-unavailable{clear:both;padding-top:24px}.song-row-preview{width:150px;height:28px;flex:none}
+@media(max-width:780px){.song-row{align-items:flex-start;flex-wrap:wrap}.song-album{flex-basis:calc(100% - 45px);order:3}.song-row .genre-tags{order:4;margin-left:42px}}

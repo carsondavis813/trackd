@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Posts{% endblock %}
+{% block content %}
+<section class="reviews-page-head section-head">
+  <div><div class="kicker">THE CONVERSATION</div><h1>Posts<span class="green-dot">.</span></h1><p>Read reviews, hot takes, and listening reactions from the Trackd community.</p></div>
+</section>
+<nav class="sort-controls" aria-label="Post sorting">
+  <span>Sort by</span>
+  <a class="{{ 'active' if sort == 'trending' else '' }}" href="{{ url_for('posts_index', sort='trending') }}">Trending</a>
+  <a class="{{ 'active' if sort == 'popular' else '' }}" href="{{ url_for('posts_index', sort='popular') }}">Most popular</a>
+</nav>
+{% if reviews %}
+<section class="reviews-directory">
+  {% for review in reviews %}
+  <article class="review-directory-card">
+    {% if review.post_type == 'song' %}
+    <a class="review-directory-cover" href="{{ url_for('song_detail', song_id=review.song_id) }}">
+      {% if review.cover_url %}<img src="{{ review.cover_url }}" alt="{{ review.song_title }} cover" loading="lazy">
+      {% else %}<div class="album-art {{ review.art_class }}"><span class="cover-title">{{ review.song_title }}</span><span class="cover-artist">{{ review.artist }}</span></div>{% endif %}
+    </a>
+    {% else %}
+    <a class="review-directory-cover" href="{{ url_for('album_detail', album_id=review.album_id) }}">
+      {% if review.cover_url %}<img src="{{ review.cover_url }}" alt="{{ review.album_title }} cover" loading="lazy">
+      {% else %}<div class="album-art {{ review.art_class }}"><span class="cover-title">{{ review.album_title }}</span><span class="cover-artist">{{ review.artist }}</span></div>{% endif %}
+    </a>
+    {% endif %}
+    <div class="review-directory-copy">
+      <div class="review-top"><strong>{{ review.display_name }}</strong><span class="stars">★ {{ review.rating }}/5</span></div>
+      {% if review.category %}<span class="category-badge">{{ review.category }}</span>{% endif %}
+      {% if review.post_type == 'song' %}
+      <h2><a href="{{ url_for('song_detail', song_id=review.song_id) }}">{{ review.song_title }}</a></h2>
+      <p class="review-directory-artist">{{ review.artist }} · from <a href="{{ url_for('album_detail', album_id=review.album_id) }}">{{ review.album_title }}</a></p>
+      {% else %}
+      <h2><a href="{{ url_for('album_detail', album_id=review.album_id) }}">{{ review.album_title }}</a></h2>
+      <p class="review-directory-artist">{{ review.artist }}</p>
+      {% endif %}
+      <p>{{ review.review_text }}</p>
+      <small>{{ review.created_at }}</small>
+      <div class="genre-tags">{% for genre in genres_by_album[review.album_id] %}<span class="genre"><a href="{{ url_for('genre_detail', slug=genre_slugs[genre]) }}">{{ genre }}</a></span>{% endfor %}</div>
+    </div>
+  </article>
+  {% endfor %}
+</section>
+{% else %}
+<div class="empty-state"><strong>No reviews yet.</strong><p>Open an album and be the first to share a take.</p><a class="primary-button" href="{{ url_for('albums_index') }}">Explore albums</a></div>
+{% endif %}
+{% endblock %}

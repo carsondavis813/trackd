@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}{{ genre.name }}{% endblock %}
+{% block content %}
+<a href="{{ url_for('genres_index') }}" class="back-link">← All genres</a>
+<section class="section-head genre-page-head">
+  <div><div class="kicker">EXPLORE BY GENRE</div><h1>{{ genre.name }}<span class="green-dot">.</span></h1><p>{{ albums|length }} release{{ '' if albums|length == 1 else 's' }} · {{ song_count }} song{{ '' if song_count == 1 else 's' }} · {{ musicians|length }} musician{{ '' if musicians|length == 1 else 's' }}.</p></div>
+</section>
+<section class="album-grid">
+  {% for album in albums %}
+  <div class="album-card">
+  <a href="{{ url_for('album_detail', album_id=album.id) }}">
+    {% if album.cover_url %}<img class="album-cover" src="{{ album.cover_url }}" alt="{{ album.title }} album cover" loading="lazy">{% else %}<div class="album-art {{ album.art_class }}"><span class="cover-title">{{ album.title }}</span><span class="cover-artist">{{ album.artist }}</span></div>{% endif %}
+    <div class="album-title">{{ album.title }}</div>
+    <div class="album-meta">{{ album.artist }} · {{ album.year }}</div>
+  </a>
+    <div class="genre-tags">{% for album_genre in genres_by_album[album.id] %}<span class="genre"><a href="{{ url_for('genre_detail', slug=genre_slugs[album_genre]) }}">{{ album_genre }}</a></span>{% endfor %}</div>
+  </div>
+  {% else %}
+  <p class="empty">No albums in this genre yet.</p>
+  {% endfor %}
+</section>
+{% if songs %}
+<section class="musicians-section">
+  <div class="section-head"><div><div class="kicker">TRACKS IN THIS GENRE</div><h2>{{ genre.name }} songs<span class="green-dot">.</span></h2></div></div>
+  <div class="song-list">
+    {% for song in songs %}
+    <a class="song-row" href="{{ url_for('song_detail', song_id=song.id) }}">
+      <span class="song-title">{{ song.title }}</span><span class="song-album">{{ song.artist }} · {{ song.album_title }}</span>
+      <span class="genre-tags"><span class="genre">{{ genre.name }}</span></span>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+<section class="musicians-section">
+  <div class="section-head"><div><div class="kicker">ARTISTS IN THIS GENRE</div><h2>{{ genre.name }} musicians<span class="green-dot">.</span></h2></div></div>
+  <div class="musician-grid">
+    {% for musician in musicians %}
+    <a class="musician-card" href="{{ url_for('musician_detail', slug=musician.slug) }}">
+      <span class="musician-name">{{ musician.name }}</span>
+      <span class="genre-tags">{% for musician_genre in genres_by_musician[musician.id] %}<span class="genre">{{ musician_genre }}</span>{% endfor %}</span>
+    </a>
+    {% else %}
+    <p class="empty">No musicians in this genre yet.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

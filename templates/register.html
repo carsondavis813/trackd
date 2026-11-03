@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Create Account{% endblock %}
+{% block content %}
+<section class="account-layout">
+  <div class="account-intro"><div class="kicker">JOIN TRACKD</div><h1>Create your music profile<span class="green-dot">.</span></h1><p>Choose the genres you love and get album recommendations tailored to you.</p></div>
+  <form method="post" class="account-form">
+    <label for="username">Username</label><input id="username" name="username" required minlength="3" maxlength="30" autocomplete="username">
+    <label for="password">Password</label><input id="password" name="password" required minlength="6" maxlength="128" type="password" autocomplete="new-password">
+    <fieldset><legend>Your genres</legend><div class="genre-options">{% for genre in genres %}<label><input type="checkbox" name="genres" value="{{ genre.id }}"> {{ genre.name }}</label>{% endfor %}</div></fieldset>
+    <button class="primary-button" type="submit">Create account</button>
+    <p class="account-switch">Already have an account? <a href="{{ url_for('login') }}">Log in</a></p>
+  </form>
+</section>
+{% endblock %}

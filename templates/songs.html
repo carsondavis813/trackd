@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Songs{% endblock %}
+{% block content %}
+<section class="section-head musician-page-head">
+  <div><div class="kicker">THE TRACKLIST</div><h1>Songs<span class="green-dot">.</span></h1><p>Explore tracks from albums in the Trackd catalog.</p></div>
+  <form action="{{ url_for('songs_index') }}" method="get" class="search"><span>⌕</span><input name="q" value="{{ query }}" placeholder="Search songs, albums, artists..." aria-label="Search songs, albums, artists"><button type="submit">Search</button></form>
+</section>
+<nav class="sort-controls" aria-label="Song sorting">
+  <span>Sort by</span>
+  <a class="{{ 'active' if sort == 'trending' else '' }}" href="{{ url_for('songs_index', q=query, sort='trending') }}">Trending</a>
+  <a class="{{ 'active' if sort == 'popular' else '' }}" href="{{ url_for('songs_index', q=query, sort='popular') }}">Most popular</a>
+  <a class="{{ 'active' if sort == 'newest' else '' }}" href="{{ url_for('songs_index', q=query, sort='newest') }}">Newest</a>
+</nav>
+{% if songs %}
+<div class="song-list">
+  {% for song in songs %}
+  <article class="song-row">
+    {% if song.cover_url %}<img class="song-row-cover" src="{{ song.cover_url }}" alt="" loading="lazy">{% endif %}
+    {% if song.preview_url %}<audio class="song-row-preview" controls preload="none" src="{{ song.preview_url }}" data-song-id="{{ song.id }}" aria-label="Preview {{ song.title }}"></audio>{% endif %}
+    <span class="track-number">{{ (page - 1) * 50 + loop.index }}</span>
+    <a class="song-title" href="{{ url_for('song_detail', song_id=song.id) }}">{{ song.title }}</a>
+    <span class="song-album">{% for musician in musicians_by_album[song.album_id] %}<a href="{{ url_for('musician_detail', slug=musician.slug) }}">{{ musician.name }}</a>{% if not loop.last %}, {% endif %}{% else %}{{ song.artist }}{% endfor %} · <a href="{{ url_for('album_detail', album_id=song.album_id) }}">{{ song.album_title }}</a></span>
+    <span class="genre-tags">{% for genre in genres_by_album[song.album_id] %}<span class="genre"><a href="{{ url_for('genre_detail', slug=genre_slugs[genre]) }}">{{ genre }}</a></span>{% endfor %}</span>
+  </article>
+  {% endfor %}
+</div>
+{% else %}
+<div class="empty-state"><strong>No catalog songs yet.</strong><p>Sync the catalog to load albums and tracklists.</p></div>
+{% endif %}
+{% if page_count > 1 %}
+<nav class="pagination" aria-label="Song pages">
+  {% if page > 1 %}<a href="{{ url_for('songs_index', q=query, sort=sort, page=page - 1) }}">← Previous</a>{% endif %}
+  <span>Page {{ page }} of {{ page_count }}</span>
+  {% if page < page_count %}<a href="{{ url_for('songs_index', q=query, sort=sort, page=page + 1) }}">Next →</a>{% endif %}
+</nav>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Genres{% endblock %}
+{% block content %}
+<section class="section-head genre-page-head">
+  <div><div class="kicker">FIND YOUR SOUND</div><h1>Genres<span class="green-dot">.</span></h1><p>Browse albums by genre.</p></div>
+</section>
+<section class="genre-grid">
+  {% for genre in genres %}
+  <a class="genre-card" href="{{ url_for('genre_detail', slug=genre.slug) }}">
+    <span class="genre-card-name">{{ genre.name }}</span>
+    <span class="genre-card-count">{{ genre.album_count }} release{{ '' if genre.album_count == 1 else 's' }} · {{ genre.song_count }} song{{ '' if genre.song_count == 1 else 's' }} · {{ genre.musician_count }} musician{{ '' if genre.musician_count == 1 else 's' }}</span>
+    <span class="genre-card-arrow">↗</span>
+  </a>
+  {% endfor %}
+</section>
+{% endblock %}

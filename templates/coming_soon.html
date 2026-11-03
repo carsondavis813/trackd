@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %}{{ section }}{% endblock %}
+{% block content %}
+<section class="empty-state coming-soon">
+  <div class="kicker">COMING SOON</div>
+  <h1>{{ section }} on Trackd<span class="green-dot">.</span></h1>
+  <p>This part of Trackd is still in the works. For now, you can explore albums and share a review.</p>
+  <a class="primary-button" href="{{ url_for('index') }}#explore">Explore albums <span>↗</span></a>
+</section>
+{% endblock %}

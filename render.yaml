@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: trackd
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: sh -c "if [ ! -f /var/data/trackd.db ]; then cp trackd.db /var/data/trackd.db; fi; gunicorn app:app"
+    envVars:
+      - key: TRACKD_DATABASE_PATH
+        value: /var/data/trackd.db
+      - key: TRACKD_SECRET_KEY
+        generateValue: true
+    disk:
+      name: trackd-data
+      mountPath: /var/data
+      sizeGB: 1

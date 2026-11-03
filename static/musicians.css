@@ -1,0 +1,15 @@
+.musician-page-head{margin-top:54px}
+.musician-page-head h1,.musician-detail h1{font-size:clamp(42px,6vw,68px);margin:8px 0}
+.musician-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:85px}
+.musician-card{display:flex;flex-direction:column;justify-content:space-between;gap:8px;min-height:110px;padding:20px;border:1px solid var(--line);border-radius:9px;background:linear-gradient(145deg,#17211c,#111716);transition:border-color .2s,transform .2s}
+.musician-card:hover{border-color:#6a8f4e;transform:translateY(-3px)}
+.musician-name{font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:700;letter-spacing:-.4px}
+.musician-profile-link{display:flex;align-items:center;gap:14px}
+.musician-card .genre-tags .genre{margin-top:7px}
+.musician-detail{margin:55px 0 42px;padding-bottom:38px;border-bottom:1px solid var(--line)}
+.musician-detail h2{margin:28px 0 12px;font-size:18px;letter-spacing:0}
+.artist-genres{font-size:13px;color:var(--muted)}
+.artist-genres a{color:var(--green)}
+.musicians-section{padding-bottom:60px}
+@media(max-width:780px){.musician-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:480px){.musician-grid{gap:10px}.musician-card{padding:15px;min-height:105px}.musician-name{font-size:17px}}

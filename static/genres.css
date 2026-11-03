@@ -1,0 +1,15 @@
+.genre-page-head{margin-top:54px}
+.genre-page-head h1{font-size:clamp(42px,6vw,68px);margin:8px 0}
+.genre-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;margin-bottom:85px}
+.genre-card{position:relative;display:flex;flex-direction:column;gap:12px;min-height:145px;padding:24px;border:1px solid var(--line);border-radius:9px;background:linear-gradient(145deg,#17211c,#111716);transition:border-color .2s,transform .2s}
+.genre-card:hover{border-color:#6a8f4e;transform:translateY(-3px)}
+.genre-card-name{font-family:'Space Grotesk',sans-serif;font-size:23px;font-weight:700;letter-spacing:-.7px}
+.genre-card-count{font-size:13px;color:var(--muted)}
+.genre-card-arrow{position:absolute;right:22px;top:22px;color:var(--green)}
+.genre-tags{display:flex;flex-wrap:wrap;gap:7px}
+.genre-tags .genre{margin-top:11px}
+.genre-tags a:hover{color:var(--green)}
+.detail-copy .genre-tags .genre{margin-top:0}
+.review-card .genre-tags .genre{margin-top:13px}
+@media(max-width:780px){.genre-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:480px){.genre-grid{gap:10px}.genre-card{padding:18px;min-height:125px}.genre-card-name{font-size:19px}}
